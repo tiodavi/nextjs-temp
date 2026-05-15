@@ -20,25 +20,26 @@ export default async function HomePage() {
         </div>
 
         <div className="rounded-xl bg-white/10 p-6 shadow-xl">
-          // 在表格上方插入這段 HTML
-<form action={addCustomer} className="mb-10 flex gap-4 bg-white/5 p-4 rounded-lg">
-  <input
-    name="name"
-    placeholder="客戶姓名"
-    className="bg-white/10 border border-white/20 p-2 rounded flex-1"
-    required
-  />
-  <input
-    name="email"
-    type="email"
-    placeholder="Email"
-    className="bg-white/10 border border-white/20 p-2 rounded flex-1"
-    required
-  />
-  <button type="submit" className="bg-[hsl(280,100%,70%)] px-4 py-2 rounded font-bold">
-    新增客戶
-  </button>
-</form>
+          {/* 修正：在表格上方插入新增客戶表單 */}
+          <form action={addCustomer} className="mb-10 flex gap-4 bg-white/5 p-4 rounded-lg">
+            <input
+              name="name"
+              placeholder="客戶姓名"
+              className="bg-white/10 border border-white/20 p-2 rounded flex-1 text-white"
+              required
+            />
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              className="bg-white/10 border border-white/20 p-2 rounded flex-1 text-white"
+              required
+            />
+            <button type="submit" className="bg-[hsl(280,100%,70%)] px-4 py-2 rounded font-bold hover:opacity-90 transition">
+              新增客戶
+            </button>
+          </form>
+
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-white/20">
