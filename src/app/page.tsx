@@ -12,7 +12,7 @@ export default async function HomePage() {
       <div className="container mx-auto max-w-5xl">
         
         {/* 標題區：增加文字漸層與陰影 */}
-        {/* <header className="mb-16 text-center space-y-4">
+        <header className="mb-16 text-center space-y-4">
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter">
             <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-sm">
               CRM
@@ -30,7 +30,7 @@ export default async function HomePage() {
               體適能 BMI 工具 →
             </Link>
           </div>
-        </header> */}
+        </header>
         <header className="mb-16 text-center relative">
   {/* 在標題左後方放一個裝飾圖 */}
   <img 
