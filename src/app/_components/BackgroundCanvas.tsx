@@ -3,11 +3,16 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import { useState, useRef } from "react";
+
+// @ts-ignore
 import * as random from "maath/random/dist/maath-random.esm";
 
 function Stars() {
   const ref = useRef<any>();
-  const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 1.5 }));
+  // 這裡也要確保型別安全，將 sphere 設為 any
+  const [sphere] = useState(() => 
+    random.inSphere(new Float32Array(5000), { radius: 1.5 }) as Float32Array
+  );
 
   useFrame((state, delta) => {
     if (ref.current) {
