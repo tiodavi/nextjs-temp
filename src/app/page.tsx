@@ -1,92 +1,65 @@
 import Link from "next/link";
-import { db } from "~/server/db";
-import { customers } from "~/server/db/schema";
-import { addCustomer, deleteCustomer } from "./actions";
-import BackgroundCanvas from "./_components/BackgroundCanvas"; // 引入 WebGL
+import { db } from "~/server/db"; // 引入資料庫連線
+import { customers } from "~/server/db/schema"; // 引入資料表定義
+import { addCustomer } from "./actions";
 
 export default async function HomePage() {
+  // 從資料庫抓取所有客戶，並依照建立時間排序
   const allCustomers = await db.select().from(customers);
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden">
-      {/* 1. WebGL 背景 */}
-      <BackgroundCanvas />
+    <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white p-8">
+      <div className="container max-w-4xl">
+        <h1 className="text-4xl font-extrabold mb-8 text-center">
+          客戶<span className="text-[hsl(280,100%,70%)]">管理</span>系統
+        </h1>
 
-      <div className="container relative mx-auto max-w-5xl px-6 py-16 text-white">
-        {/* 2. 標題區 (增加發光特效) */}
-        <header className="mb-16 text-center">
-          <h1 className="text-6xl font-black tracking-tighter drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
-            DASHBOARD <span className="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">ULTRA</span>
-          </h1>
-          <p className="mt-4 text-gray-400">高端客戶管理系統 ‧ 實時雲端同步</p>
-        </header>
+        {/* 這裡可以放個超連結去 BMI */}
+        <div className="mb-8 text-center">
+           <Link href="/bmi" className="text-sm underline opacity-70 hover:opacity-100">前往 BMI 計算器 →</Link>
+        </div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {/* 3. 左側：新增表單 (毛玻璃效果) */}
-          <aside className="lg:col-span-1">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
-              <h2 className="mb-6 text-xl font-bold">快速錄入</h2>
-              <form action={addCustomer} className="flex flex-col gap-4">
-                <input
-                  name="name"
-                  placeholder="姓名"
-                  required
-                  className="rounded-lg bg-white/5 border border-white/10 p-3 outline-none focus:border-purple-500 transition"
-                />
-                <input
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  required
-                  className="rounded-lg bg-white/5 border border-white/10 p-3 outline-none focus:border-purple-500 transition"
-                />
-                <button className="mt-2 w-full rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 py-3 font-bold shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:scale-[1.02] transition">
-                  存入資料庫
-                </button>
-              </form>
-            </div>
+        <div className="rounded-xl bg-white/10 p-6 shadow-xl">
+          {/* 修正：在表格上方插入新增客戶表單 */}
+          <form action={addCustomer} className="mb-10 flex gap-4 bg-white/5 p-4 rounded-lg">
+            <input
+              name="name"
+              placeholder="客戶姓名"
+              className="bg-white/10 border border-white/20 p-2 rounded flex-1 text-white"
+              required
+            />
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              className="bg-white/10 border border-white/20 p-2 rounded flex-1 text-white"
+              required
+            />
+            <button type="submit" className="bg-[hsl(280,100%,70%)] px-4 py-2 rounded font-bold hover:opacity-90 transition">
+              新增客戶
+            </button>
+          </form>
 
-            <Link href="/bmi" className="mt-6 block rounded-xl border border-white/10 bg-white/5 p-4 text-center text-sm hover:bg-white/10 transition">
-               身體質量指數 (BMI) 工具 →
-            </Link>
-          </aside>
-
-          {/* 4. 右側：客戶列表 (透明卡片) */}
-          <section className="lg:col-span-2">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-8 backdrop-blur-md">
-              <h2 className="mb-6 text-2xl font-bold">現有成員</h2>
-              <div className="max-h-[500px] overflow-y-auto pr-2">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="border-b border-white/10 text-gray-400 text-sm">
-                      <th className="pb-4">客戶資訊</th>
-                      <th className="pb-4 text-right">操作</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5">
-                    {allCustomers.map((c) => (
-                      <tr key={c.id} className="group">
-                        <td className="py-5">
-                          <div className="font-bold">{c.name}</div>
-                          <div className="text-xs text-gray-500">{c.email}</div>
-                        </td>
-                        <td className="py-5 text-right">
-                          <form action={deleteCustomer.bind(null, c.id)}>
-                            <button className="rounded-md px-3 py-1 text-xs border border-red-500/50 text-red-400 opacity-0 group-hover:opacity-100 transition hover:bg-red-500 hover:text-white">
-                              移除
-                            </button>
-                          </form>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {allCustomers.length === 0 && (
-                  <p className="py-20 text-center text-gray-500">尚無存檔紀錄</p>
-                )}
-              </div>
-            </div>
-          </section>
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-white/20">
+                <th className="pb-3">姓名</th>
+                <th className="pb-3">Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allCustomers.map((c) => (
+                <tr key={c.id} className="border-b border-white/5">
+                  <td className="py-3">{c.name}</td>
+                  <td className="py-3 text-gray-400">{c.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          
+          {allCustomers.length === 0 && (
+            <p className="py-10 text-center text-gray-400">目前資料庫沒有客戶</p>
+          )}
         </div>
       </div>
     </main>
